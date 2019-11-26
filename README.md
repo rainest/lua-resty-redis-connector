@@ -134,6 +134,7 @@ If configured as a table of commands, the command methods will be replaced by a 
     path = "",  -- unix socket path, e.g. /tmp/redis.sock
     password = "",
     db = 0,
+    redis_major_version = 3,
 
     master_name = "mymaster",
     role = "master",  -- master | slave
@@ -202,6 +203,8 @@ The following methods are not typically needed, but may be useful if a custom in
 
 Returns a Redis connection by first accessing a sentinel as supplied by the `params.sentinels` table,
 and querying this with the `params.master_name` and `params.role`.
+
+If `params.redis_major_version >= 5` and `params.password` is defined, this will send an AUTH command to sentinels. Older versions will not, as doing so [is not supported](https://github.com/antirez/redis/issues/3279).
 
 
 ### try_hosts

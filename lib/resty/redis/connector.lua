@@ -226,7 +226,13 @@ function _M.connect_via_sentinel(self, params)
     local master_name = params.master_name
     local role = params.role
     local db = params.db
+    local redis_major_version = params.redis_major_version or 3
     local password = params.password
+    if password and redis_major_version >= 5 then
+      for i,host in ipairs(sentinels) do
+        host.password = password
+      end
+    end
 
     local sentnl, err, previous_errors = self:try_hosts(sentinels)
     if not sentnl then
